@@ -20,8 +20,10 @@ Example:
 
 ./logchimes.rb my.awesomeserver.com myusername /var/log/apache2/access.log 1 8
 
-TODO:
+Todo/Ideas:
 
 - I'd really like to figure out how to do the midi part better with midiator so I could hook it up to a nicer sound bank (such as windchimes)
-- Perhaps adaptively change the scaling factor so that rarer status codes are played immediately but common one's don't drown them out.
+- Perhaps adaptively change the scaling factor so that rarer status codes are played immediately but common ones don't drown them out
+- Change volume based on frequency of status code
 - Clean up the ssh interface so that it works more generally
+- Consolidate the status code parsing based on http rfc so that error codes use one scale, non-errors use another, etc.
