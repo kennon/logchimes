@@ -1,0 +1,27 @@
+Logchimes
+
+This is a quick and dirty proof of concept for an ambient sound generator based on tailing the status codes from a webserver log. "Normal" status codes (200, 304, etc) play notes from the major pentatonic scale, and "bad" codes such as 403 or 404 play clashing notes to draw attention to themselves. If you have a busy log, you can adjust the 'scaling factor' that sets how many requests per status code it should wait before playing a note.
+
+Logchimes uses net/ssh to ssh to a remote server and tail a filename you specify. It also assumes that you have pubkey passwordless auth set up for the remote server.
+
+By default, the apache2 combined logfile format puts the status code in column 8, but you can also change this if you use a different format.
+
+It probably only works on OSX because of the softsynth dependency in the midiator gem, but suggestions on how to make it more general would be appreciated.
+
+This requires the 'midiator' gem (gem install midiator)
+
+I threw this together in honor of Whyday 2010 (http://whyday.org), my contribution to the whimsical ruby community that _why supported and encouraged.
+
+Usage:
+
+./logchimes.rb <server> <ssh username> <filename to tail> <scaling factor> <column in file with status code>
+
+Example:
+
+./logchimes.rb my.awesomeserver.com myusername /var/log/apache2/access.log 1 8
+
+TODO:
+
+- I'd really like to figure out how to do the midi part better with midiator so I could hook it up to a nicer sound bank (such as windchimes)
+- Perhaps adaptively change the scaling factor so that rarer status codes are played immediately but common one's don't drown them out.
+- Clean up the ssh interface so that it works more generally
