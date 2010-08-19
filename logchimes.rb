@@ -56,6 +56,7 @@ end
 midi = MIDIator::Interface.new
 midi.use("dls_synth")
 midi.instruct_user!
+midi.program_change 0, 8
 
 server = ARGV[0]
 username = ARGV[1]
@@ -72,34 +73,36 @@ status_codes = {}
 
 tail_server_file(server, username, filename) do |line|
   matches = line.split(/ /)
-  status_code = matches[column].to_i
-  
-  status_codes[status_code] ||= 0
+  status_code = matches[column]
 
-  case status_code
-  when 200, 304
-    note = majorpentatonic4.sample
-    vel = 64
-  when 206, 301, 302
-    note = majorpentatonic5.sample
-    vel = 80
-  when 403
-    note = clashing.sample
-    vel = 100
-  when 404, 416, 500, 502, 504
-    note = clashing.sample
-    vel = 100
-  else
-    note = nil
-    puts status_code
-  end
+  if status_code =~ /^[12345]\d\d$/
+    status_code = status_code.to_i  
+    status_codes[status_code] ||= 0
 
-  if note && (status_codes[status_code] % scaling_factor) == 0
-    midi.driver.note_off note, 0
-    midi.driver.note_on note, 0, vel
-    puts "#{status_code} #{status_codes.inspect}"
-  end
+    case status_code
+    when 200, 304
+      note = majorpentatonic4.sample
+      vel = 64
+    when 206, 301, 302
+      note = majorpentatonic5.sample
+      vel = 80
+    when 403
+      note = clashing.sample
+      vel = 100
+    when 404, 416, 500, 502, 504
+      note = clashing.sample
+      vel = 100
+    else
+      note = nil
+    end
+
+    if note && (status_codes[status_code] % scaling_factor) == 0
+      midi.driver.note_off note, 0
+      midi.driver.note_on note, 0, vel
+      puts "#{status_code} #{status_codes.inspect}"
+    end
   
-  status_codes[status_code] += 1  
+    status_codes[status_code] += 1  
+  end
 end
 
