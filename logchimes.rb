@@ -65,8 +65,8 @@ scaling_factor = ARGV[3].to_i
 column = ARGV[4].to_i
 
 majorpentatonic = [C4, D4, E4, G4, A4, C5]
-majorpentatonic4 = [C4, D4, E4, G4, A4]
-majorpentatonic5 = [C5, D5, E5, G5, A6]
+majorpentatonic4 = [C3, D3, E3, G3, A3, C4, D4, E4, G4, A4, C5, D5, E5, G5, A5]
+majorpentatonic5 = [C6, D6, E6, G6, A7]
 clashing = [F4, B4, F5, B5]
 
 status_codes = {}
